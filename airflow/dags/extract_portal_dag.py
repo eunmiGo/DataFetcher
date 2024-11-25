@@ -3,8 +3,8 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
 from extract_portal.extract_portal import ExtractPortal
-from load.load_data import load_data
-from load.load_meta_data import load_meta_data
+from load.load_data import LoadData
+from load.load_meta_data import LoadMetaData
 
 default_args = {
     'owner': 'admin',
@@ -42,8 +42,9 @@ def load_portal_def(**kwargs):
     ti = kwargs['ti']
     file_path = ti.xcom_pull(task_ids='crawling_portal_task', key='file_path')
     bucket_name = ti.xcom_pull(task_ids='crawling_portal_task', key='bucket_name')
+    load_data = LoadData(file_path, bucket_name)
     if file_path:
-        minio_path, file_size, bucket_name = load_data(file_path, bucket_name)
+        minio_path, file_size, bucket_name = load_data.load_data()
         kwargs['ti'].xcom_push(key='minio_path', value=minio_path)
         kwargs['ti'].xcom_push(key='file_size', value=file_size)
         kwargs['ti'].xcom_push(key='bucket_name', value=bucket_name)
@@ -55,9 +56,9 @@ def load_portal_meta_def(**kwargs):
     ti = kwargs['ti']
     minio_path = ti.xcom_pull(task_ids='load_portal_task', key='minio_path')
     file_size = ti.xcom_pull(task_ids='load_portal_task', key='file_size')
-    bucket_name = ti.xcom_pull(task_ids='load_portal_task', key='bucket_name')
+    loader = LoadMetaData(minio_path, file_size)
     if minio_path:
-        load_meta_data(minio_path, file_size)
+        loader.load_meta_data()
 
 
 crawling_portal_task = PythonOperator(
