@@ -23,10 +23,9 @@ dag = DAG(
 
 
 def crawling_blog_def(**kwargs):
+    extractor = ExtractBlogUrl('https://section.blog.naver.com/BlogHome.naver?directoryNo=0&currentPage=1&groupId=0')
     try:
-        url = 'https://section.blog.naver.com/BlogHome.naver?directoryNo=0&currentPage=1&groupId=0'
-        extract_blog_url = ExtractBlogUrl(url)
-        path_list = extract_blog_url.blog_crawler()
+        path_list = extractor.blog_crawler()
         kwargs['ti'].xcom_push(key='path_list', value=path_list)
         kwargs['ti'].xcom_push(key='bucket_name', value="blog")
     except Exception as e:
@@ -47,9 +46,9 @@ def load_blog_def(**kwargs):
     ti = kwargs['ti']
     data = ti.xcom_pull(task_ids='crawling_blog_task', key='path_list')
     bucket_name = ti.xcom_pull(task_ids='crawling_blog_task', key='bucket_name')
-    load_data = LoadData(data, bucket_name)
+    loader = LoadData(data, bucket_name)
     if data:
-        minio_path_list, file_size, bucket_name = load_data.load_data()
+        minio_path_list, file_size, bucket_name = loader.load_data()
         kwargs['ti'].xcom_push(key='minio_path_list', value=minio_path_list)
         kwargs['ti'].xcom_push(key='file_size', value=file_size)
         kwargs['ti'].xcom_push(key='bucket_name', value=bucket_name)
@@ -61,9 +60,9 @@ def load_blog_meta_def(**kwargs):
     ti = kwargs['ti']
     minio_path_list = ti.xcom_pull(task_ids='load_blog_task', key='minio_path_list')
     file_size = ti.xcom_pull(task_ids='load_blog_task', key='file_size')
-    load_meta_data = LoadMetaData(minio_path_list, file_size)
+    loader = LoadMetaData(minio_path_list, file_size)
     if minio_path_list:
-        load_meta_data.load_meta_data()
+        loader.load_meta_data()
 
 
 crawling_blog_task = PythonOperator(
