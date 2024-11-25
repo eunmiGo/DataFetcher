@@ -5,9 +5,6 @@ from urllib.parse import urlparse
 import requests
 
 from config.config import NaverAPIIdentify
-from extract_blog import util
-import os
-import sys
 import urllib.request
 
 SKIP_URL = {
