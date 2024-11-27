@@ -9,12 +9,12 @@ from extract_keyword import extract_keyword
 
 
 class ExtractBlogUrl:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, search_word):
+        self.search_word = search_word
 
     def blog_crawler(self):
         # 해당 web 에 있는 모든 url 을 수집해 리턴
-        blog_url_list = search.publish_embedded_links(self.url)
+        blog_url_list = search.publish_embedded_links(self.search_word)
 
         path_list = []
 
@@ -57,4 +57,4 @@ class ExtractBlogUrl:
 if __name__ == "__main__":
     test_url = 'https://m.blog.naver.com'
     extractor = ExtractBlogUrl(test_url)
-    crawler = extractor.blog_crawler
+    crawler = extractor.blog_crawler()

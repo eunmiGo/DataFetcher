@@ -37,13 +37,13 @@ url_list = [
 ]
 
 
-def grab_url_list(url):
+def grab_url_list(search_word: str):
     client_id = NaverAPIIdentify.client_id
     client_secret = NaverAPIIdentify.client_secret
 
-    enctext = urllib.parse.quote("검색할 단어")
+    enctext = urllib.parse.quote(search_word)
     url = "https://openapi.naver.com/v1/search/blog?query=" + enctext + "&display=5&sort=date"  # JSON 결과
-    # url = "https://openapi.naver.com/v1/search/blog.xml?query=" + encText # XML 결과
+
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id", client_id)
     request.add_header("X-Naver-Client-Secret", client_secret)
@@ -57,23 +57,16 @@ def grab_url_list(url):
         return None
 
 
-def search_link(base_url: str, target_url: str):
+def search_link(search_word: str):
     searched_url = set()
     try:
-        page = grab_url_list(target_url)
+        page = grab_url_list(search_word)
     except requests.exceptions.HTTPError:
         raise
 
     items = page["items"]
     for item in items:
-        path = item["link"]
-
-        if path.startswith('/'):
-            url = f"{base_url}{path}"
-        elif path.startswith('http'):
-            url = path
-        else:
-            continue
+        url = item["link"]
 
         try:
             url = urlparse(url)
@@ -95,9 +88,8 @@ def get_base_url(url):
     return base_url
 
 
-def publish_embedded_links(main_url):
-    base_url = get_base_url(main_url)
-    embedded_links = search_link(base_url, main_url)
+def publish_embedded_links(search_word):
+    embedded_links = search_link(search_word)
 
     return embedded_links
 
