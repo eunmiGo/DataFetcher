@@ -14,7 +14,7 @@ class ExtractBlogUrl:
 
     def blog_crawler(self):
         # 해당 web 에 있는 모든 url 을 수집해 리턴
-        blog_url_list = search.publish_embedded_links(self.search_word)
+        blog_url_list = search.search_link(self.search_word)
 
         path_list = []
 
@@ -55,6 +55,6 @@ class ExtractBlogUrl:
 
 
 if __name__ == "__main__":
-    test_url = 'https://m.blog.naver.com'
-    extractor = ExtractBlogUrl(test_url)
+    search_word = '고양이'
+    extractor = ExtractBlogUrl(search_word)
     crawler = extractor.blog_crawler()

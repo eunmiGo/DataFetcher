@@ -82,19 +82,6 @@ def search_link(search_word: str):
     return searched_url
 
 
-def get_base_url(url):
-    url = urlparse(url)
-    base_url = f'{url.scheme}://{url.netloc}'
-    return base_url
-
-
-def publish_embedded_links(search_word):
-    embedded_links = search_link(search_word)
-
-    return embedded_links
-
-
 if __name__ == '__main__':
-    # start_url = 'https://ksh-coding.tistory.com/144'
-    start_url = 'https://section.blog.naver.com'
-    publish_embedded_links(start_url)
+    start_word = '고양이'
+    search_link(start_word)
