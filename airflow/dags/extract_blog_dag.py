@@ -23,11 +23,10 @@ dag = DAG(
 
 
 def crawling_blog_def(**kwargs):
-    extractor = ExtractBlogUrl('https://section.blog.naver.com/BlogHome.naver?directoryNo=0&currentPage=1&groupId=0')
+    extractor = ExtractBlogUrl('검색어 입력')
     try:
         path_list = extractor.blog_crawler()
         kwargs['ti'].xcom_push(key='path_list', value=path_list)
-        kwargs['ti'].xcom_push(key='bucket_name', value="blog")
     except Exception as e:
         print("fetch data blog def error")
         raise Exception(e)

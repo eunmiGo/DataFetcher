@@ -62,4 +62,5 @@ class LoadData:
 
             minio_file_path = "http://" + url + "/" + bucket_name + "/" + file_name
             file_size = os.path.getsize(file_path)
+            return minio_file_path, file_size
         return minio_file_path, file_size, bucket_name

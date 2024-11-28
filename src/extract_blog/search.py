@@ -7,35 +7,6 @@ import requests
 from config.config import NaverAPIIdentify
 import urllib.request
 
-SKIP_URL = {
-    'tistory': ['tag', 'archive', 'category', 'rss', 'guestbook', 'manage', 'entry']
-}
-
-SITE_TYPE = {
-    'com': {
-        'tistory': 'TISTORY',
-        'naver': 'NAVER',
-    }
-}
-
-url_list = [
-    'https://www.naver.com/',
-    'https://www.naver.com/rules/service.html',
-    'https://section.blog.naver.com/OfficialBlog.naver',
-    'https://blog.naver.com/post/blog_use.htm',
-    'https://section.blog.naver.com/HotTopicChallenge.naver',
-    'https://section.blog.naver.com/PowerBlog.naver',
-    'https://section.blog.naver.com/ThemePost.naver',
-    'https://www.naver.com/rules/disclaimer.html',
-    'https://help.naver.com/service/5593/contents/5043',
-    'https://section.blog.naver.com/BlogHome.naver',
-    'https://www.naver.com/rules/privacy.html',
-    'https://section.blog.naver.com/thisMonthDirectory.naver',
-    'https://section.blog.naver.com/PreviousThisMonthBlog.naver',
-    'https://right.naver.com',
-    'https://www.navercorp.com/',
-]
-
 
 def grab_url_list(search_word: str):
     client_id = NaverAPIIdentify.client_id
@@ -74,11 +45,7 @@ def search_link(search_word: str):
             print("Error: " + ' '.join(e.args))
             continue
         url_path = f'{url.scheme}://{url.netloc}{url.path}'
-
-        if url_path not in url_list:
-            searched_url.add(url_path)
-
-        print()
+        searched_url.add(url_path)
     return searched_url
 
 

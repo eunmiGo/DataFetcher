@@ -55,6 +55,6 @@ class ExtractBlogUrl:
 
 
 if __name__ == "__main__":
-    search_word = '고양이'
-    extractor = ExtractBlogUrl(search_word)
+    start_word = '고양이'
+    extractor = ExtractBlogUrl(start_word)
     crawler = extractor.blog_crawler()
